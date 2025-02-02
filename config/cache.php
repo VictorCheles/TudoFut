@@ -90,6 +90,8 @@ return [
             'driver' => 'octane',
         ],
 
+        'tempo_cache' => env('CACHE_EXPIRATION_HOURS', 24),
+
     ],
 
     /*
