@@ -27,6 +27,13 @@ class CompetitionController extends Controller
         return $this->apiClientService->getCompetitions($idCountrie);
     }
 
+    public function getDataCompetition($code)
+    {
+        $competicoesGerais = $this->apiClientService->getDataCompetition($code);
+        return $this->apiClientService->getMatchesForMatchday($code, $competicoesGerais['seasons'][0]['currentMatchday']);
+        ;
+    }
+
     private function getPaises()
     {
         return $this->apiClientService->filterCountries(

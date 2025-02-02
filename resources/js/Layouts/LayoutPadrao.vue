@@ -1,3 +1,8 @@
+<script setup>
+import { usePage } from "@inertiajs/vue3";
+
+const page = usePage();
+</script>
 <template>
     <header class="p-3 mb-3 border-bottom bg-navbar">
         <div class="container">
@@ -8,13 +13,13 @@
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 tex">
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="">
+                    <a class="nav-link text-white" :class="page.url === '/' ? 'border-bottom' : ''" href="/">
                         <i class="bi bi-trophy-fill ico-navbar" style="color: orange"></i>
                         Campeonatos
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="">
+                    <a class="nav-link text-white" :class="page.url === '/times' ? 'border-bottom' : ''" href="/times">
                         <i class="bi bi-dribbble" style="color: black"></i>
                         Pesquise o seu time
                     </a>
@@ -30,16 +35,10 @@
 
 <style>
 .bg-navbar {
-    background-color: #95b58a !important;
+    background:linear-gradient(to right,#87dc6b, #045701);
+    border-radius: 0 0 80px 0;
 }
 .nav-link:hover {
     color: #0a6e1e !important;
-}
-
-.card-exibe-resulta-competicao {
-    background-color: #95b58a !important;
-    color: white !important;
-    width: 300px;
-    height: 150px;
 }
 </style>

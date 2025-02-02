@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\CompetitionController;
 
 Route::get('/', [CompetitionController::class, 'index']);
+Route::get('/times', [CompetitionController::class, 'index']);
 
 //grupo de rotas de campeonatos
 Route::prefix('campeonatos')->group(function () {
