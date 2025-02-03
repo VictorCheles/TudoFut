@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: app-tudo-fut
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:B7WOrSlvHqdczfqE9rdElBIOe/fGLXV5qEbYroK6Jb8=
+      - APP_URL=http://0.0.0.0
+
+    networks:
+      - laravel_network
+    ports:
+      - "8009:80"
+
+networks:
+  laravel_network:
+

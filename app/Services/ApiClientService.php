@@ -44,7 +44,17 @@ class ApiClientService
 
     public function getCountries()
     {
-        $response = $this->fetchFromApi('/areas');
+        $chaveCache = 'dados_pais_';
+        $response = Cache::remember($chaveCache, now()->addHours(config('cache.tempo_cache')), function () use ($chaveCache) {
+            $response = $this->fetchFromApi("/areas");
+
+            if(isset($response['error']) && $response['error']){
+                Cache::forget($chaveCache);
+            }
+
+            return $response;
+        });
+
         return $response;
     }
 
@@ -52,7 +62,17 @@ class ApiClientService
     {
         $params = $countryId ? ['areas' => $countryId] : [];
 
-        $response = $this->fetchFromApi("/competitions", $params);
+        $chaveCache = 'dados_competicoes_por_pais_'.$countryId;
+        $response = Cache::remember($chaveCache, now()->addHours(config('cache.tempo_cache')), function () use ($params, $chaveCache) {
+            $response = $this->fetchFromApi("/competitions", $params);
+
+            if(isset($response['error']) && $response['error']){
+                Cache::forget($chaveCache);
+            }
+
+            return $response;
+
+        });
         return $response;
     }
 
@@ -72,15 +92,45 @@ class ApiClientService
         });
     }
 
-    public function getTeams($offset = 0)
+    public function getNameTeams()
     {
         try{
-            return Cache::remember("dados_team_for_offset_$offset", now()->addHours(config('cache.tempo_cache')), function () use ($offset) {
-                return $this->fetchFromApi("/teams",[
-                    'limit' => 500,
-                    'offset' => $offset,
-                ]);
-            });
+            $response = $this->filterCountries(
+                $this->getCountries()['areas']?? []
+            );
+            $idPaises = collect($response)->pluck('id')->toArray();
+
+           $response = $this->getCompetitions(implode(',', $idPaises));
+           $codCompeticoes = collect($response['competitions'])->pluck('code')->toArray();
+
+           $competicoesDados = [];
+
+            foreach($codCompeticoes as $index => $codCompeticao){
+
+                $chaveCache = 'dados_nomes_times_por_competicao_'.$codCompeticao;
+                $retornoConsultaApi = Cache::remember($chaveCache, now()->addHours(config('cache.tempo_cache')), function () use ($codCompeticao, $chaveCache) {
+                    $retorno = $this->fetchFromApi("/competitions/$codCompeticao/teams");
+
+                    if(isset($retorno['error']) && $retorno['error']){
+                        Cache::forget($chaveCache);
+                    }
+
+                    return $retorno;
+                });
+
+                if(!empty($retornoConsultaApi['teams'])){
+                    $dadosFiltrados = collect($retornoConsultaApi['teams'])->map(function ($team) {
+                        return [
+                            'id' => $team['id'],
+                            'name' => $team['name'],
+                            'crest' => $team['crest']
+                        ];
+                    });
+
+                    $competicoesDados = $competicoesDados + $dadosFiltrados->toArray();
+                }
+            }
+            return $competicoesDados;
         }
         catch (\Throwable $th) {
             Log::error("Erro ao buscar dados da API: " . $th->getMessage());
@@ -100,32 +150,6 @@ class ApiClientService
             Log::error("Erro ao buscar dados dos times via API: " . $th->getMessage());
             return response()->json(['error' => 'Ocorreu um erro na consulta dos dados'], 500);
         }
-    }
-
-    public function getTeamForName($name)
-    {
-        try {
-            $teamResponse = [];
-            foreach (range(0, 8000, 500) as $offset) {
-                $response = $this->getTeams($offset);
-                $teams = isset($response['teams']) ? collect($response['teams']) : [];
-
-                if(!empty($teams) && $filteredTeams = $teams->filter(fn($team) => stripos($team['name'], $name))){
-                    if(!empty($filteredTeams)){
-                        $teamResponse = $teamResponse + $filteredTeams->toArray();
-                    }
-                }
-            }
-
-            if (!$teamResponse) {
-                return response()->json(['error' => 'Time não encontrado'], 404);
-            }
-            return $teamResponse ;
-        } catch (\Throwable $th) {
-            Log::error("Erro ao buscar dados da API: " . $th->getMessage());
-            return response()->json(['error' => 'Ocorreu um erro na consulta dos dados'], 500);
-        }
-
     }
 
     public function filterCountries($paises)

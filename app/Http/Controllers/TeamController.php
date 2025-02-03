@@ -17,15 +17,17 @@ class TeamController extends Controller
 
     public function index()
     {
-        return Inertia::render('Teams');
+        return Inertia::render('Teams', [
+            'teams' => $this->apiClientService->getNameTeams()
+        ]);
     }
 
-    public function getNameTeams(Request $request)
-    {
-        $name = $request->input('name');
-        $teams = $this->apiClientService->getTeamForName($name);
-        return $teams;
-    }
+    // public function getNameTeams(Request $request)
+    // {
+    //     $name = $request->input('name');
+    //     $teams = $this->apiClientService->getTeamForName($name);
+    //     return $teams;
+    // }
 
     public function getDadosTeam($id)
     {

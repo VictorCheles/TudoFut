@@ -1,20 +1,49 @@
 <script setup>
 import LayoutPadrao from "@/Layouts/LayoutPadrao.vue";
 import axios from "axios";
-import { ref } from "vue";
+import { computed, ref } from "vue";
+
+const props = defineProps({
+    teams: Object,
+});
 
 
 const nameTeam = ref("");
 const teams = ref([]);
 const dropdownAberto = ref(false);
 
+const loadingSearchTeam = ref(false);
+
+const filteredTeams = computed(() => {
+    if (!nameTeam.value) {
+        abrirDropdown(false);
+        return [];
+    }
+
+    const termo = nameTeam.value.toLowerCase();
+
+    const resultado = Object.entries(props.teams)
+        .filter(([id, team]) => team.name.toLowerCase().includes(termo))
+        .map(([id, team]) => ({
+            id,
+            name: team.name,
+            crest: team.crest
+        }));
+
+    abrirDropdown(resultado.length > 0);
+    return resultado;
+});
+
 const consultarTimesPorNome = async () => {
+    loadingSearchTeam.value = true;
+    abrirDropdown(true);
     try {
-        abrirDropdown(true);
         const response = await axios.post("/teams/search/name", {
             name: nameTeam.value
         });
         teams.value = response.data;
+        loadingSearchTeam.value = false;
+
         console.log(response);
     } catch (error) {
         console.log(error);
@@ -38,6 +67,7 @@ const selecionarTime = (team) => {
 const abrirDropdown = (isOpen) => {
     dropdownAberto.value = isOpen;
 }
+
 </script>
 <template>
     <LayoutPadrao>
@@ -56,10 +86,12 @@ const abrirDropdown = (isOpen) => {
                             Pesquisar
                         </button>
                         <ul class="dropdown-menu mt-1" :class="{ 'show': dropdownAberto }">
-                            <li v-for="team in teams" :key="team.id">
+                            <li v-if="filteredTeams.length === 0">
+                                <a class="dropdown-item">Nenhum time encontrado</a>
+                            </li>
+                            <li v-for="team in filteredTeams" :key="team.id">
                                 <a class="dropdown-item" href="#" @click="selecionarTime(team)">
-                                    <img :src="team.crest" class="pais-bandeira" alt="Bandeira" width="24" height="24"
-                                        v-if="team.crest" />
+                                    <img :src="team.crest" class="pais-bandeira mx-1" alt="Bandeira" width="24" height="24" />
                                     {{ team.name }}
                                 </a>
                             </li>
