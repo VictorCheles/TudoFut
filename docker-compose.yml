@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  tudofut_app:
+    build: .
+    container_name: tudofut_app
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+      - ./docker-entrypoint.sh:/var/www/html/docker-entrypoint.sh
+    entrypoint: [ "sh", "/var/www/html/docker-entrypoint.sh" ]
+    depends_on:
+      mysqldb:
+        condition:
+          service_healthy
+    expose:
+      - "9000"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:B7WOrSlvHqdczfqE9rdElBIOe/fGLXV5qEbYroK6Jb8=
+      - APP_URL=http://0.0.0.0
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysqldb
+      - DB_PORT=3306
+      - DB_DATABASE=tudofut
+      - DB_USERNAME=tudofut_user
+      - DB_PASSWORD=secret123
+      - API_FOOTBALL_URL=http://api.football-data.org/v4
+      - API_FOOTBALL_TOKEN=f5962365c2e341e188aac0aa933b7762
+      - CACHE_STORE=file
+    networks:
+      - laravel_net
+
+  node:
+    image: node:20
+    container_name: vue_frontend
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/node_modules
+    command: [ "sh", "-c", "npm install && npm run build && php-fpm" ]
+    depends_on:
+      - tudofut_app
+    networks:
+      - laravel_net
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_server
+    ports:
+      - "8800:80"
+    depends_on:
+     - tudofut_app
+    volumes:
+      - .:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - laravel_net
+
+  mysqldb:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: tudofut
+      MYSQL_USER: tudofut_user
+      MYSQL_PASSWORD: secret123
+      MYSQL_ROOT_PASSWORD: secret123_root
+    volumes:
+      - ./db_data:/var/lib/mysql
+      - ./mysql-init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+    networks:
+      - laravel_net
+
+networks:
+  laravel_net:
+    driver: bridge
+
+
