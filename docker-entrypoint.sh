@@ -9,6 +9,14 @@ chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/v
 echo "🔧 Gerando .env..."
 cp .env.example .env
 
+# Instalar dependências PHP
+echo "📦 Instalando dependências do Composer..."
+composer install --no-interaction --prefer-dist
+
+# Instalar dependências do Node.js
+echo "📦 Instalando dependências do NPM..."
+npm install && npm run dev
+
 #gera a chave da aplicação
 echo "🔧 Gerando chave da aplicação..."
 php artisan key:generate
