@@ -28,10 +28,12 @@ O **TudoFut** é um sistema que permite consultar e gerenciar informações sobr
 ## ⚙️ **Instalação e Configuração**
 ### 🔹 **1. Clonar o Repositório**
 ```bash
-git clone https://github.com/seu-usuario/tudofut.git
+git clone https://github.com/victorcheles/tudofut.git
 cd tudofut
 
-docker-compose up -d --build
+docker-compose build
+docker-compose up -d
+
 
 📌 O Docker automaticamente executará:
 ✅ Instalação do Composer e NPM
@@ -40,6 +42,7 @@ docker-compose up -d --build
 ✅ Rodar a Importação de Dados Manualmente
 
 > ⚠️ **IMPORTANTE:** 
+
 docker exec -it tudofut_app php artisan importar:dados-fixos
 
 ✅ Limpar Cache e Configurações

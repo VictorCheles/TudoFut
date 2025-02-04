@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  laravel_app:
+  tudofut_app:
     build: .
-    container_name: laravel_app
+    container_name: tudofut_app
     working_dir: /var/www/html
     volumes:
       - .:/var/www/html
@@ -41,7 +41,7 @@ services:
       - /var/www/html/node_modules
     command: [ "sh", "-c", "npm install && npm run build && php-fpm" ]
     depends_on:
-      - laravel_app
+      - tudofut_app
     networks:
       - laravel_net
 
@@ -51,7 +51,7 @@ services:
     ports:
       - "8800:80"
     depends_on:
-     - laravel_app
+     - tudofut_app
     volumes:
       - .:/var/www/html
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
