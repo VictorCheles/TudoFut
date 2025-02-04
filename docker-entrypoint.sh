@@ -13,6 +13,10 @@ composer install --no-interaction --prefer-dist
 echo "📦 Instalando dependências do NPM..."
 npm install && npm run dev
 
+# Gerar o arquivo .env
+echo "🔧 Gerando arquivo .env..."
+cp .env.example .env
+
 #gera a chave da aplicação
 echo "🔧 Gerando chave da aplicação..."
 php artisan key:generate
