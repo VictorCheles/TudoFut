@@ -26,6 +26,9 @@ services:
       - DB_DATABASE=tudofut
       - DB_USERNAME=tudofut_user
       - DB_PASSWORD=secret123
+      - API_FOOTBALL_URL=http://api.football-data.org/v4
+      - API_FOOTBALL_TOKEN=f5962365c2e341e188aac0aa933b7762
+      - CACHE_STORE=file
     networks:
       - laravel_net
 
