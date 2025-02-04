@@ -7,7 +7,6 @@ services:
     working_dir: /var/www/html
     volumes:
       - .:/var/www/html
-      - /var/www/html/vendor
       - ./docker-entrypoint.sh:/var/www/html/docker-entrypoint.sh
     entrypoint: [ "sh", "/var/www/html/docker-entrypoint.sh" ]
     depends_on:
@@ -53,7 +52,7 @@ services:
     image: nginx:latest
     container_name: nginx_server
     ports:
-      - "80:80"
+      - "8800:80"
     depends_on:
       node:
         condition: service_healthy

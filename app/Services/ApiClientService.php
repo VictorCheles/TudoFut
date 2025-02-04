@@ -15,7 +15,7 @@ class ApiClientService
 
     public function __construct()
     {
-        $this->baseUrl = config('services.api_cliente.url'); // Configurar no .env
+        $this->baseUrl = config('services.api_cliente.url');
     }
 
     public function fetchFromApi(string $endpoint, array $params = [])
@@ -40,22 +40,6 @@ class ApiClientService
                 'data' => null
             ];
         }
-    }
-
-    public function getCountries()
-    {
-        $chaveCache = 'dados_pais_';
-        $response = Cache::remember($chaveCache, now()->addHours(config('cache.tempo_cache')), function () use ($chaveCache) {
-            $response = $this->fetchFromApi("/areas");
-
-            if(isset($response['error']) && $response['error']){
-                Cache::forget($chaveCache);
-            }
-
-            return $response;
-        });
-
-        return $response;
     }
 
     public function getCompetitions($countryId = null)
@@ -83,57 +67,16 @@ class ApiClientService
     }
     public function getMatchesForMatchday($code, $matchday)
     {
-        $response = $this->fetchFromApi("/competitions/$code/matches",[
-            'matchday' => $matchday
-        ]);
-
-        return collect($response['matches'])->groupBy(function ($match) {
-            return $match['status'];
-        });
-    }
-
-    public function getNameTeams()
-    {
         try{
-            $response = $this->filterCountries(
-                $this->getCountries()['areas']?? []
-            );
-            $idPaises = collect($response)->pluck('id')->toArray();
+            $response = $this->fetchFromApi("/competitions/$code/matches",[
+                'matchday' => $matchday
+            ]);
 
-           $response = $this->getCompetitions(implode(',', $idPaises));
-           $codCompeticoes = collect($response['competitions'])->pluck('code')->toArray();
-
-           $competicoesDados = [];
-
-            foreach($codCompeticoes as $index => $codCompeticao){
-
-                $chaveCache = 'dados_nomes_times_por_competicao_'.$codCompeticao;
-                $retornoConsultaApi = Cache::remember($chaveCache, now()->addHours(config('cache.tempo_cache')), function () use ($codCompeticao, $chaveCache) {
-                    $retorno = $this->fetchFromApi("/competitions/$codCompeticao/teams");
-
-                    if(isset($retorno['error']) && $retorno['error']){
-                        Cache::forget($chaveCache);
-                    }
-
-                    return $retorno;
-                });
-
-                if(!empty($retornoConsultaApi['teams'])){
-                    $dadosFiltrados = collect($retornoConsultaApi['teams'])->map(function ($team) {
-                        return [
-                            'id' => $team['id'],
-                            'name' => $team['name'],
-                            'crest' => $team['crest']
-                        ];
-                    });
-
-                    $competicoesDados = $competicoesDados + $dadosFiltrados->toArray();
-                }
-            }
-            return $competicoesDados;
-        }
-        catch (\Throwable $th) {
-            Log::error("Erro ao buscar dados da API: " . $th->getMessage());
+            return collect($response['matches'])->groupBy(function ($match) {
+                return $match['status'];
+            });
+        }catch(\Throwable $th) {
+            Log::error("Erro ao buscar dados dos jogos via API: " . $th->getMessage());
             return response()->json(['error' => 'Ocorreu um erro na consulta dos dados'], 500);
         }
 
@@ -141,7 +84,6 @@ class ApiClientService
 
     public function getTeamData($id)
     {
-        dd('ID:'.$id);
         try{
             $response = $this->fetchFromApi("/teams/$id");
             return $response;
@@ -158,5 +100,11 @@ class ApiClientService
             return in_array($pais['countryCode'], $this->paisesPermitidos);
         });
        return $filtrados;
+    }
+
+    public function getMatchForTeam($id)
+    {
+        $response = $this->fetchFromApi("/teams/$id/matches");
+        return $response;
     }
 }

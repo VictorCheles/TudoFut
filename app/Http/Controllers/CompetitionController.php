@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\ApiClientService;
+use App\Services\DadosFixosService;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
@@ -11,10 +12,12 @@ use Illuminate\Support\Facades\Cache;
 class CompetitionController extends Controller
 {
     private $apiClientService;
+    private $dadosFixosService;
 
-    public function __construct(ApiClientService $apiClientService)
+    public function __construct(ApiClientService $apiClientService, DadosFixosService $dadosFixosService)
     {
         $this->apiClientService = $apiClientService;
+        $this->dadosFixosService = $dadosFixosService;
     }
 
     public function index()
@@ -58,7 +61,7 @@ class CompetitionController extends Controller
     {
         return Cache::remember('dados_paises', now()->addHours(config('cache.tempo_cache')), function () {
             return $this->apiClientService->filterCountries(
-                $this->apiClientService->getCountries()['areas']?? []
+                $this->dadosFixosService->getPaises()->toArray() ?? []
             );
         });
     }
