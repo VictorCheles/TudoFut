@@ -1,23 +1,59 @@
 version: '3.8'
 
 services:
-  app:
-    build: .
-    container_name: app-tudo-fut
+  laravel_app:
+    image: php:8.3-fpm
+    container_name: laravel_app
     working_dir: /var/www/html
     volumes:
       - .:/var/www/html
+      - ./docker-entrypoint.sh:/var/www/html/docker-entrypoint.sh
+    entrypoint: [ "sh", "/var/www/html/docker-entrypoint.sh" ]
+    expose:
+      - "9000"
     environment:
       - APP_ENV=local
       - APP_DEBUG=true
       - APP_KEY=base64:B7WOrSlvHqdczfqE9rdElBIOe/fGLXV5qEbYroK6Jb8=
       - APP_URL=http://0.0.0.0
-
     networks:
-      - laravel_network
+      - laravel_net
+
+  node:
+    image: node:20
+    container_name: vue_frontend
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/node_modules
+    command: [ "sh", "-c", "npm install && npm run build && php-fpm" ]
+    depends_on:
+      - laravel_app
+    networks:
+      - laravel_net
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_server
     ports:
-      - "8009:80"
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - node
+      - laravel_app
+    networks:
+      - laravel_net
+
+  mysqldb:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: secret
 
 networks:
-  laravel_network:
+  laravel_net:
+    driver: bridge
+
 
