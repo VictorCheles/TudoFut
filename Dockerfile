@@ -22,7 +22,7 @@ RUN mkdir -p /var/www/html/vendor
 
 # Ajustar permissões para evitar erros de escrita
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/vendor
-RUN chmod -R 775 storage bootstrap/cache /var/www/html/vendor
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/vendor
 
 # Instalar dependências do Laravel no build
 RUN composer install --no-dev --no-interaction --prefer-dist

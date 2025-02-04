@@ -2,8 +2,8 @@
 
 # Ajustar permissões para evitar erros de escrita
 echo "🔧 Ajustando permissões..."
-chown -R www-data:www-data storage bootstrap/cache vendor
-chmod -R 775 storage bootstrap/cache vendor
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache vendor
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/vendor
 
 #gera o .env
 echo "🔧 Gerando .env..."
