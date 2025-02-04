@@ -7,6 +7,7 @@ use App\Services\ApiClientService;
 use App\Services\DadosFixosService;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class CompetitionController extends Controller
 {
