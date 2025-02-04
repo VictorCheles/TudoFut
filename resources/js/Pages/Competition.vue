@@ -4,6 +4,7 @@ import { useFormatarData } from "@/composables/useFormatarData";
 import LayoutPadrao from "@/Layouts/LayoutPadrao.vue";
 import axios from "axios";
 import { defineProps, ref } from "vue";
+import AlertErro from "../Components/AlertErro.vue";
 
 const props = defineProps({
     paises: Object,
@@ -23,6 +24,7 @@ const loadingCompeticao = ref(false);
 const loadingRodadasCampeonato = ref(false);
 
 const erroConsultaApi = ref(false);
+const mensagemErro = ref("Ocorreu um erro ao carregar os dados do campeonato.");
 
 const selecionarPais = (pais) => {
     paisSelecionado.value = pais;
@@ -46,10 +48,6 @@ const errorCarregarCampeonato = () => {
     erroConsultaApi.value = true;
 };
 
-const recarregarPagina = () => {
-    window.location.reload();
-};
-
 const statusJogo = {
     SCHEDULED: "Agendado",
     FINISHED: "Finalizado",
@@ -68,8 +66,7 @@ const carregarCampeonatos = () => {
         .then((response) => {
             campeonatos.value = response.data.competitions;
         })
-        .catch((error) => {
-            console.log(error);
+        .catch(() => {
             errorCarregarCampeonato();
         })
         .finally(() => {
@@ -84,8 +81,7 @@ const dadosCampeonato = () => {
         .then((response) => {
             dadosRodadasCampeonato.value = response.data;
         })
-        .catch((error) => {
-            console.log(error);
+        .catch(() => {
             errorCarregarCampeonato();
         })
         .finally(() => {
@@ -276,25 +272,13 @@ const dadosCampeonato = () => {
                             </div>
                         </div>
                     </div>
-                    <div
-                        class="alert alert-danger my-3 text-center"
-                        role="alert"
-                        v-if="
-                            erroConsultaApi || Object.keys(paises).length === 0
-                        "
-                    >
-                        <p>Ocorreu um erro na consulta dos dados.</p>
-                        <button
-                            id="recarregar-pagina"
-                            class="btn btn-danger btn-sm"
-                            @click="recarregarPagina"
-                        >
-                            Recarregar Página
-                        </button>
-                    </div>
+
                 </div>
             </div>
-
+            <AlertErro
+                :erroConsultaApi="erroConsultaApi"
+                :mensagem="mensagemErro"
+            />
             <div class="card my-3">
                 <div class="card-body card-dados-jogos">
                     <h5 class="card-title">

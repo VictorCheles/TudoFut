@@ -56,12 +56,12 @@ class ApiClientService
             return collect($response->json());
         } catch (\Throwable $e) {
             Log::error("Erro ao buscar dados da API: " . $e->getMessage());
-            return [
+            return response()->json([
                 'error' => true,
                 'message' => $e->getMessage(),
                 'status' => isset($response) ? $response->status() : 500,
                 'data' => null
-            ];
+            ], 500);
         }
     }
 
@@ -80,19 +80,24 @@ class ApiClientService
 
     public function getCompetitions($countryId = null)
     {
-        $params = $countryId ? ['areas' => $countryId] : [];
+        try {
+            $params = $countryId ? ['areas' => $countryId] : [];
 
-        $chaveCache = 'dados_competicoes_por_pais_'.$countryId;
-        $response = Cache::remember($chaveCache, now()->addHours(config('cache.tempo_cache')), function () use ($params, $chaveCache) {
-            $response = $this->fetchFromApi("/competitions", $params);
+            $chaveCache = 'dados_competicoes_por_pais_'.$countryId;
+            $response = Cache::remember($chaveCache, now()->addHours(config('cache.tempo_cache')), function () use ($params, $chaveCache) {
+                $response = $this->fetchFromApi("/competitions", $params);
 
-            if(isset($response['error']) && $response['error']){
-                Cache::forget($chaveCache);
-            }
+                if(isset($response['error']) && $response['error']){
+                    Cache::forget($chaveCache);
+                }
 
+                return $response;
+            });
             return $response;
-        });
-        return $response;
+        } catch (\Throwable $th) {
+            Log::error("Erro ao buscar dados da API: " . $th->getMessage());
+            return response()->json(['error' => 'Ocorreu um erro na consulta dos dados'], 500);
+        }
     }
 
     /**

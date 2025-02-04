@@ -30,6 +30,7 @@ const props = defineProps({
                         :src="props.jogo.homeTeam.crest"
                         class="mr-1"
                         width="24"
+                        v-if="props.jogo.homeTeam?.crest"
                     />
                     {{ props.jogo.homeTeam.name }}
                     <span
@@ -65,6 +66,7 @@ const props = defineProps({
                         :src="props.jogo.awayTeam.crest"
                         class="mr-1"
                         width="24"
+                        v-if="props.jogo.awayTeam?.crest"
                     />
                     {{ props.jogo.awayTeam.name }}
                     <span

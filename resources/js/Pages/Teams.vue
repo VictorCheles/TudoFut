@@ -3,6 +3,7 @@ import { useFormatarData } from "@/composables/useFormatarData";
 import LayoutPadrao from "@/Layouts/LayoutPadrao.vue";
 import axios from "axios";
 import { computed, ref } from "vue";
+import AlertErro from "../Components/AlertErro.vue";
 
 const props = defineProps({
     teams: Object,
@@ -46,12 +47,10 @@ const consultarDadosTime = async (id) => {
     try {
         const response = await axios.get(`/teams/search/id/${id}`);
         dadosTeam.value = response.data;
-        console.log(dadosTeam.value.nextMatchs);
         loadingSearchTeam.value = false;
     } catch (error) {
         alertError(true);
         loadingSearchTeam.value = false;
-        console.log(error);
     }
 }
 
@@ -96,9 +95,7 @@ const alertError = (status) => {
                     </div>
                 </div>
             </div>
-            <div class="alert alert-warning text-center fw-bold" role="alert" :hidden="!error.status">
-               <p>{{error.mensagem}}</p>
-            </div>
+            <AlertErro :erroConsultaApi="error.status" :mensagem="error.mensagem" />
             <div class="alert alert-primary text-center fw-bold" role="alert" :hidden="!loadingSearchTeam">
                <p>Aguarde... Dados sendo carregados</p>
                 <div class="spinner-border text-success" role="status">
