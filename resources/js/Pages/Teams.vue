@@ -41,29 +41,12 @@ const filteredTeams = computed(() => {
     return resultado;
 });
 
-const consultarTimesPorNome = async () => {
-    loadingSearchTeam.value = true;
-    abrirDropdown(true);
-    try {
-        const response = await axios.post("/teams/search/name", {
-            name: nameTeam.value
-        });
-        teams.value = response.data;
-        loadingSearchTeam.value = false;
-
-        console.log(response);
-    } catch (error) {
-        alertError(true);
-        loadingSearchTeam.value = false;
-        console.log(error);
-    }
-}
-
 const consultarDadosTime = async (id) => {
     loadingSearchTeam.value = true;
     try {
         const response = await axios.get(`/teams/search/id/${id}`);
         dadosTeam.value = response.data;
+        console.log(dadosTeam.value.nextMatchs);
         loadingSearchTeam.value = false;
     } catch (error) {
         alertError(true);
@@ -99,9 +82,6 @@ const alertError = (status) => {
                             <i class="bi bi-search"></i>
                         </span>
                         <input type="text" class="form-control" placeholder="Pesquisar por time" aria-label="Username" aria-describedby="basic-addon1" v-model="nameTeam">
-                        <button class="btn btn-outline-primary" type="button" id="button-addon1" @click="consultarTimesPorNome">
-                            Pesquisar
-                        </button>
                         <ul class="dropdown-menu mt-1" :class="{ 'show': dropdownAberto }">
                             <li v-if="filteredTeams.length === 0">
                                 <a class="dropdown-item">Nenhum time encontrado</a>
@@ -164,7 +144,7 @@ const alertError = (status) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <template v-for="game in dadosTeam.nextMatchs" :key="game.id">
+                                <template v-for="game in dadosTeam.nextMatchs" :key="game.id" v-if="Object.keys(dadosTeam.nextMatchs).length > 0">
                                     <tr>
                                         <td colspan="3" class="text-center fw-bold bg-light">
                                             {{ useFormatarData(game.utcDate) }}
@@ -179,6 +159,13 @@ const alertError = (status) => {
                                         <td class="text-start">
                                             <img :src="game.awayTeam.crest" class="pais-bandeira mx-1" alt="Bandeira" width="24" height="24" v-if="game.awayTeam.crest"/>
                                             {{ game.awayTeam.name }}
+                                        </td>
+                                    </tr>
+                                </template>
+                                <template v-else>
+                                    <tr>
+                                        <td colspan="3" class="text-center fw-bold bg-light">
+                                            Nenhum jogo encontrado
                                         </td>
                                     </tr>
                                 </template>
@@ -201,7 +188,7 @@ const alertError = (status) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <template v-for="game in dadosTeam.previousMatchs" :key="game.id">
+                                <template v-for="game in dadosTeam.previousMatchs" :key="game.id" v-if="Object.keys(dadosTeam.previousMatchs.length > 0)">
                                     <tr>
                                         <td colspan="3" class="text-center fw-bold bg-light">
                                             {{ useFormatarData(game.utcDate) }}
@@ -217,6 +204,13 @@ const alertError = (status) => {
                                             <i class="bi bi-trophy-fill ico-navbar card-img-top" style="color: orange" v-if="game.score.winner == 'AWAY_TEAM'" ></i>
                                             <span class="fw-bold mx-2 h5" :class="{ 'text-danger': game.score.fullTime.home < game.score.fullTime.away }">{{ game.score.fullTime.home }}</span>
                                             <img :src="game.awayTeam.crest" class="pais-bandeira mx-1" alt="Bandeira" width="24" height="24" v-if="game.awayTeam.crest"/> {{ game.awayTeam.name }}
+                                        </td>
+                                    </tr>
+                                </template>
+                                <template v-else>
+                                    <tr>
+                                        <td colspan="3" class="text-center fw-bold bg-light">
+                                            Nenhum jogo encontrado
                                         </td>
                                     </tr>
                                 </template>
