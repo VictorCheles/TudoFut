@@ -21,6 +21,7 @@ const error = ref({
 });
 
 const filteredTeams = computed(() => {
+    alertError(false);
     if (!nameTeam.value) {
         abrirDropdown(false);
         return [];
@@ -52,7 +53,7 @@ const consultarTimesPorNome = async () => {
 
         console.log(response);
     } catch (error) {
-        alertError();
+        alertError(true);
         loadingSearchTeam.value = false;
         console.log(error);
     }
@@ -65,7 +66,7 @@ const consultarDadosTime = async (id) => {
         dadosTeam.value = response.data;
         loadingSearchTeam.value = false;
     } catch (error) {
-        alertError();
+        alertError(true);
         loadingSearchTeam.value = false;
         console.log(error);
     }
@@ -80,8 +81,8 @@ const abrirDropdown = (isOpen) => {
     dropdownAberto.value = isOpen;
 }
 
-const alertError = () => {
-    error.value.status = true;
+const alertError = (status) => {
+    error.value.status = status;
 }
 
 </script>
@@ -153,23 +154,34 @@ const alertError = () => {
                    <h5 class="card-title mb-3 fw-bold text-primary p-2 border rounded text-center">
                         PRÓXIMOS JOGOS
                    </h5>
-                   <div class="card-exibe-resulta-competicao d-flex flex-wrap">
-                        <table class="table table-striped">
+                   <div class="card-exibe-resulta-competicao d-flex flex-wrap justify-content-center">
+                        <table class="table table-striped w-50">
                             <thead>
                                 <tr>
-                                    <th scope="col" style="text-align: center;">Data</th>
                                     <th scope="col" style="text-align: end;">Casa</th>
                                     <th scope="col" style="text-align: center;">X</th>
                                     <th scope="col">Fora</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="game in dadosTeam.nextMatchs" :key="game.id">
-                                    <td class="text-center fw-bold">{{ useFormatarData(game.utcDate) }}</td>
-                                    <td class="text-end">{{ game.homeTeam.name }} <img :src="game.homeTeam.crest" class="pais-bandeira mx-1" alt="Bandeira" width="24" height="24" v-if="game.homeTeam.crest"/></td>
-                                    <td class="text-center fw-bold">X</td>
-                                    <td>{{ game.awayTeam.name }} <img :src="game.awayTeam.crest" class="pais-bandeira mx-1" alt="Bandeira" width="24" height="24" v-if="game.awayTeam.crest"/></td>
-                                </tr>
+                                <template v-for="game in dadosTeam.nextMatchs" :key="game.id">
+                                    <tr>
+                                        <td colspan="3" class="text-center fw-bold bg-light">
+                                            {{ useFormatarData(game.utcDate) }}
+                                        </td>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <td class="text-end">
+                                            {{ game.homeTeam.name }}
+                                            <img :src="game.homeTeam.crest" class="pais-bandeira mx-1" alt="Bandeira" width="24" height="24" v-if="game.homeTeam.crest"/>
+                                        </td>
+                                        <td class="text-center fw-bold">X</td>
+                                        <td class="text-start">
+                                            <img :src="game.awayTeam.crest" class="pais-bandeira mx-1" alt="Bandeira" width="24" height="24" v-if="game.awayTeam.crest"/>
+                                            {{ game.awayTeam.name }}
+                                        </td>
+                                    </tr>
+                                </template>
                             </tbody>
                         </table>
                    </div>
@@ -179,30 +191,35 @@ const alertError = () => {
                    <h5 class="card-title mb-3 fw-bold text-primary p-2 border rounded text-center">
                         JOGOS ANTERIORES
                    </h5>
-                   <div class="card-exibe-resulta-competicao d-flex flex-wrap">
-                        <table class="table table-striped">
+                   <div class="card-exibe-resulta-competicao d-flex flex-wrap justify-content-center">
+                        <table class="table table-striped w-50">
                             <thead>
                                 <tr>
-                                    <th scope="col" style="text-align: center;">Data</th>
                                     <th scope="col" style="text-align: end;">Casa</th>
                                     <th scope="col" style="text-align: center;">X</th>
                                     <th scope="col">Fora</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="game in dadosTeam.previousMatchs" :key="game.id">
-                                    <td class="text-center fw-bold">{{ useFormatarData(game.utcDate) }}</td>
-                                    <td class="text-end">{{ game.homeTeam.name }} <img :src="game.homeTeam.crest" class="pais-bandeira mx-1" alt="Bandeira" width="24" height="24" v-if="game.homeTeam.crest"/>
-                                        <span class="fw-bold mx-2" :class="{ 'text-success': game.score.fullTime.home > game.score.fullTime.away }">{{ game.score.fullTime.home }}</span>
-                                        <i class="bi bi-trophy-fill ico-navbar card-img-top px-1" style="color: orange" v-if="game.score.winner == 'HOME_TEAM'" ></i>
-
-                                    </td>
-                                    <td class="text-center fw-bold">X</td>
-                                    <td>
-                                        <i class="bi bi-trophy-fill ico-navbar card-img-top px-1" style="color: orange" v-if="game.score.winner == 'AWAY_TEAM'" ></i>
-                                        <span class="fw-bold mx-2" :class="{ 'text-danger': game.score.fullTime.home < game.score.fullTime.away }">{{ game.score.fullTime.home }}</span>
-                                        {{ game.awayTeam.name }} <img :src="game.awayTeam.crest" class="pais-bandeira mx-1" alt="Bandeira" width="24" height="24" v-if="game.awayTeam.crest"/></td>
-                                </tr>
+                                <template v-for="game in dadosTeam.previousMatchs" :key="game.id">
+                                    <tr>
+                                        <td colspan="3" class="text-center fw-bold bg-light">
+                                            {{ useFormatarData(game.utcDate) }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-end">{{ game.homeTeam.name }} <img :src="game.homeTeam.crest" class="pais-bandeira mx-1" alt="Bandeira" width="24" height="24" v-if="game.homeTeam.crest"/>
+                                            <span class="fw-bold mx-2 h5" :class="{ 'text-success': game.score.fullTime.home > game.score.fullTime.away }">{{ game.score.fullTime.home }}</span>
+                                            <i class="bi bi-trophy-fill ico-navbar card-img-top " style="color: orange" v-if="game.score.winner == 'HOME_TEAM'" ></i>
+                                        </td>
+                                        <td class="text-center fw-bold">X</td>
+                                        <td>
+                                            <i class="bi bi-trophy-fill ico-navbar card-img-top" style="color: orange" v-if="game.score.winner == 'AWAY_TEAM'" ></i>
+                                            <span class="fw-bold mx-2 h5" :class="{ 'text-danger': game.score.fullTime.home < game.score.fullTime.away }">{{ game.score.fullTime.home }}</span>
+                                            <img :src="game.awayTeam.crest" class="pais-bandeira mx-1" alt="Bandeira" width="24" height="24" v-if="game.awayTeam.crest"/> {{ game.awayTeam.name }}
+                                        </td>
+                                    </tr>
+                                </template>
                             </tbody>
                         </table>
                    </div>

@@ -11,5 +11,5 @@ export function useFormatarData(utcDate) {
             hour: "2-digit",
             minute: "2-digit",
         })
-        .replace(",", " -"); // Substitui a vírgula por um traço
+        .replace(",", " -");
 }
