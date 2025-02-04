@@ -13,6 +13,13 @@ class TeamController extends Controller
     private $apiClientService;
     private $dadosFixosService;
 
+    /**
+     * Create a new controller instance.
+     *
+     * @param  ApiClientService $apiClientService
+     * @param  DadosFixosService $dadosFixosService
+     * @return void
+     */
     public function __construct(ApiClientService $apiClientService, DadosFixosService $dadosFixosService)
     {
         $this->apiClientService = $apiClientService;
@@ -20,6 +27,11 @@ class TeamController extends Controller
 
     }
 
+    /**
+     * Exibe a tela de listagem de times.
+     *
+     * @return \Inertia\Response
+     */
     public function index()
     {
         return Inertia::render('Teams', [
@@ -27,14 +39,18 @@ class TeamController extends Controller
         ]);
     }
 
+    /**
+     * Recupera os dados de um time especifico.
+     *
+     * @param int $id
+     * @return array|\Illuminate\Http\JsonResponse
+     */
     public function getDadosTeam($id)
     {
         try {
 
             $team = $this->apiClientService->getTeamData($id);
-
             $codeCompetitions = isset($team['runningCompetitions']) ? collect($team['runningCompetitions'])->pluck('code') : [];
-
             $matchs = $this->apiClientService->getMatchForTeam($id);
 
             $retorno = [
