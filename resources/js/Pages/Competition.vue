@@ -120,7 +120,7 @@ const dadosCampeonato = () => {
                                 <li v-for="pais in paises" :key="pais.id">
                                     <a
                                         class="dropdown-item"
-                                        href=""
+                                        href="#"
                                         @click="selecionarPais(pais)"
                                     >
                                         <img
@@ -189,7 +189,7 @@ const dadosCampeonato = () => {
                                 >
                                     <a
                                         class="dropdown-item"
-                                        href=""
+                                        href="#"
                                         @click="
                                             selecionarCompeticao(campeonato)
                                         "
