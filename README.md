@@ -31,6 +31,7 @@ O **TudoFut** é um sistema que permite consultar e gerenciar informações sobr
 git clone https://github.com/victorcheles/tudofut.git
 cd tudofut
 
+### 🔹 **2. Construir e Iniciar os Serviços**
 docker-compose build
 docker-compose up -d
 
@@ -45,17 +46,16 @@ docker logs vue_frontend
 
 E após a conclusão de ambos, prossiga nos passos seguintes.
 
-
-✅ Rodar a Importação de Dados Manualmente
+### 🔹 **3. Rodar a Importação de Dados Fixos**
 
 > ⚠️ **IMPORTANTE:**  > ⚠️ **IMPORTANTE:**  > ⚠️ **IMPORTANTE:** 
 
 docker exec -it tudofut_app php artisan importar:dados-fixos
 
-✅ Limpar Cache e Configurações
+### 🔹 **4. Limpar Cache e Configurações**
 
 docker exec -it tudofut_app php artisan optimize:clear
 
-✅ Concluído ✅
+### 🔹 **5. Acessar o Sistema**
 
 http://localhost:8800
