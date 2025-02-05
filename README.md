@@ -26,6 +26,7 @@ O **TudoFut** é um sistema que permite consultar e gerenciar informações sobr
 ---
 
 ## ⚙️ **Instalação e Configuração**
+
 ### 🔹 **1. Clonar o Repositório**
 ```bash
 git clone https://github.com/victorcheles/tudofut.git
