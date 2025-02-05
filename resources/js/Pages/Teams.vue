@@ -86,10 +86,10 @@ const alertError = (status) => {
                                 <a class="dropdown-item">Nenhum time encontrado</a>
                             </li>
                             <li v-for="team in filteredTeams" :key="team.id">
-                                <a class="dropdown-item" href="#" @click="selecionarTime(team)">
+                                <div class="dropdown-item" @click="selecionarTime(team)" role="button">
                                     <img :src="team.crest" class="pais-bandeira mx-1" alt="Bandeira" width="24" height="24" />
                                     {{ team.name }}
-                                </a>
+                                </div>
                             </li>
                         </ul>
                     </div>
