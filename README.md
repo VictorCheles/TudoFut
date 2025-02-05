@@ -1,6 +1,6 @@
 # ⚽ TudoFut - Sistema de Gerenciamento de Jogos de Futebol
 
-![TudoFut Logo](public/build/logo_tudofut.svg)
+![TudoFut Logo](public/images/logo_tudofut.svg)
 
 O **TudoFut** é um sistema que permite consultar e gerenciar informações sobre campeonatos, times e partidas de futebol, utilizando dados da API **Football Data**. Com ele, usuários podem visualizar partidas, estatísticas e previsões de jogos.
 
