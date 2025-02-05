@@ -18,7 +18,7 @@ O **TudoFut** é um sistema que permite consultar e gerenciar informações sobr
 ---
 
 ## 🚀 **Tecnologias Utilizadas**
-- **Backend:** Laravel 11, PHP 8.2
+- **Backend:** Laravel 11, PHP
 - **Frontend:** Vue.js 3, Inertia.js, Bootstrap 5.3
 - **Banco de Dados:** MySQL
 - **Ambiente de Desenvolvimento:** Docker + Nginx
