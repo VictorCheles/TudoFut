@@ -43,7 +43,7 @@ Acompanhe os processos serem concluidos nos container NODE e LARAVEL
 docker logs tudofut_app
 docker logs vue_frontend
 
-E após a conclusão de ambos, processia nos passos seguintes.
+E após a conclusão de ambos, prossiga nos passos seguintes.
 
 
 ✅ Rodar a Importação de Dados Manualmente
