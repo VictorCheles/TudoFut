@@ -56,3 +56,6 @@ docker exec -it tudofut_app php artisan importar:dados-fixos
 
 docker exec -it tudofut_app php artisan optimize:clear
 
+✅ Concluído ✅
+
+http://localhost:8800
