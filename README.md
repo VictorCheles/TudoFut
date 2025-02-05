@@ -31,6 +31,12 @@ O **TudoFut** é um sistema que permite consultar e gerenciar informações sobr
 git clone https://github.com/victorcheles/tudofut.git
 cd tudofut
 
+Ajustar TOKEN da API
+
+API_FOOTBALL_URL=http://api.football-data.org/v4
+API_FOOTBALL_TOKEN=<SEU_TOKEN_API>
+
+
 ### 🔹 **2. Construir e Iniciar os Serviços**
 docker-compose build
 docker-compose up -d
