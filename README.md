@@ -34,14 +34,21 @@ cd tudofut
 docker-compose build
 docker-compose up -d
 
-
 📌 O Docker automaticamente executará:
 ✅ Instalação do Composer e NPM
 ✅ Execução das migrations
 
+Acompanhe os processos serem concluidos nos container NODE e LARAVEL
+
+docker logs tudofut_app
+docker logs vue_frontend
+
+E após a conclusão de ambos, processia nos passos seguintes.
+
+
 ✅ Rodar a Importação de Dados Manualmente
 
-> ⚠️ **IMPORTANTE:** 
+> ⚠️ **IMPORTANTE:**  > ⚠️ **IMPORTANTE:**  > ⚠️ **IMPORTANTE:** 
 
 docker exec -it tudofut_app php artisan importar:dados-fixos
 

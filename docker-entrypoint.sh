@@ -2,7 +2,7 @@
 
 # Ajustar permissões para evitar erros de escrita
 echo "🔧 Ajustando permissões..."
-chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache vendor
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/vendor
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/vendor
 
 # Instalar dependências PHP
@@ -12,6 +12,10 @@ composer install --no-interaction --prefer-dist
 # Instalar dependências do Node.js
 echo "📦 Instalando dependências do NPM..."
 npm install && npm run dev
+
+echo "🔧 Ajustando permissões...vendor"
+chown -R www-data:www-data /var/www/html/vendor
+chmod -R 775 /var/www/html/vendor
 
 # Gerar o arquivo .env
 echo "🔧 Gerando arquivo .env..."
