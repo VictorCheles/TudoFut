@@ -118,9 +118,8 @@ const dadosCampeonato = () => {
                                 class="dropdown-menu menu-select-pais w-75 w-lg-50"
                             >
                                 <li v-for="pais in paises" :key="pais.id">
-                                    <a
+                                    <button
                                         class="dropdown-item"
-                                        href="#"
                                         @click="selecionarPais(pais)"
                                     >
                                         <img
@@ -132,7 +131,7 @@ const dadosCampeonato = () => {
                                             v-if="pais.flag"
                                         />
                                         {{ pais.name }}
-                                    </a>
+                                    </button>
                                 </li>
                             </ul>
                             <img
@@ -187,22 +186,20 @@ const dadosCampeonato = () => {
                                     v-for="campeonato in campeonatos"
                                     :key="campeonato.id"
                                 >
-                                    <a
-                                        class="dropdown-item"
-                                        href="#"
-                                        @click="
-                                            selecionarCompeticao(campeonato)
-                                        "
-                                    >
-                                        <img
-                                            :src="campeonato.emblem"
-                                            class="pais-bandeira"
-                                            alt="Bandeira"
-                                            width="24"
-                                            height="24"
-                                        />
-                                        {{ campeonato.name }}
-                                    </a>
+                                <button
+                                    class="dropdown-item"
+                                    @click="selecionarCompeticao(campeonato)"
+                                >
+                                    <img
+                                        :src="campeonato.emblem"
+                                        class="pais-bandeira"
+                                        alt="Bandeira"
+                                        width="24"
+                                        height="24"
+                                    />
+                                    {{ campeonato.name }}
+                                </button>
+
                                 </li>
                             </ul>
                             <img
