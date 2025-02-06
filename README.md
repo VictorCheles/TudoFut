@@ -88,3 +88,10 @@ Após a execução dos comandos, o sistema estará rodando em:
 ```bash
 http://localhost:8800
 ```
+⚠️ **Atenção:**  
+Enquanto o sistema está subindo, pode ser exibido um erro **502 Bad Gateway**.  
+Isso ocorre porque alguns serviços podem demorar um pouco para inicializar.  
+
+🔄 **O que fazer?**  
+Aguarde alguns instantes e tente acessar novamente em:  
+👉 **http://localhost:8800**
