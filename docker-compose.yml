@@ -18,16 +18,16 @@ services:
     environment:
       - APP_ENV=local
       - APP_DEBUG=true
-      - APP_KEY=base64:B7WOrSlvHqdczfqE9rdElBIOe/fGLXV5qEbYroK6Jb8=
+      - APP_KEY=${APP_KEY}
       - APP_URL=http://0.0.0.0
       - DB_CONNECTION=mysql
       - DB_HOST=mysqldb
       - DB_PORT=3306
       - DB_DATABASE=tudofut
-      - DB_USERNAME=tudofut_user
-      - DB_PASSWORD=secret123
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
       - API_FOOTBALL_URL=http://api.football-data.org/v4
-      - API_FOOTBALL_TOKEN=f5962365c2e341e188aac0aa933b7762
+      - API_FOOTBALL_TOKEN=${API_FOOTBALL_TOKEN}
       - CACHE_STORE=file
     networks:
       - laravel_net
@@ -62,8 +62,8 @@ services:
     image: mysql:8
     environment:
       MYSQL_DATABASE: tudofut
-      MYSQL_USER: tudofut_user
-      MYSQL_PASSWORD: secret123
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: secret123_root
     volumes:
       - ./db_data:/var/lib/mysql
@@ -72,9 +72,9 @@ services:
       - "3306:3306"
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      interval: 10s
+      interval: 15s
       retries: 5
-      start_period: 10s
+      start_period: 15s
       timeout: 5s
     networks:
       - laravel_net
