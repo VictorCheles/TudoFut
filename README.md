@@ -18,7 +18,7 @@ O **TudoFut** é um sistema que permite consultar e gerenciar informações sobr
 ---
 
 ## 🚀 **Tecnologias Utilizadas**
-- **Backend:** Laravel 11, PHP 8.2
+- **Backend:** Laravel 11, PHP
 - **Frontend:** Vue.js 3, Inertia.js, Bootstrap 5.3
 - **Banco de Dados:** MySQL
 - **Ambiente de Desenvolvimento:** Docker + Nginx
@@ -65,7 +65,6 @@ docker-compose build
 docker-compose up -d
 ```
 
-
 📌 O Docker automaticamente executará:
 ✅ Instalação do Composer e NPM
 ✅ Execução das migrations
@@ -78,7 +77,7 @@ docker-compose up -d
 docker exec -it tudofut_app php artisan importar:dados-fixos
 ```
 
-✅ Limpar Cache e Configurações
+### 🔹 **4. Limpar Cache e Configurações**
 
 ```bash
 docker exec -it tudofut_app php artisan optimize:clear

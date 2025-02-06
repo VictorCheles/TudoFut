@@ -8,13 +8,13 @@
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 tex">
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="campeonatos.php">
+                        <a class="nav-link text-white" href="">
                             <i class="bi bi-trophy-fill ico-navbar" style="color: orange"></i>
                             Campeonatos
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="times.php">
+                        <a class="nav-link text-white" href="">
                             <i class="bi bi-dribbble" style="color: black"></i>
                             Pesquise o seu time
                         </a>
