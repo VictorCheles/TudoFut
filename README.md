@@ -51,7 +51,7 @@ DB_PASSWORD=sua_senha_aqui
 ```
 3. Configurar Token da API
 
-O sistema utiliza a API Football Data para buscar informações sobre jogos e times.
+O sistema utiliza a [API Football Data](https://www.football-data.org/) para buscar informações sobre jogos e times.
 Para isso, você precisa obter um token em football-data.org e adicioná-lo no .env:
 ```bash
 API_FOOTBALL_TOKEN=seu_token_aqui
