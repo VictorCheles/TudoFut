@@ -199,7 +199,7 @@ const alertError = (status) => {
                                         <td class="text-center fw-bold">X</td>
                                         <td>
                                             <i class="bi bi-trophy-fill ico-navbar card-img-top" style="color: orange" v-if="game.score.winner == 'AWAY_TEAM'" ></i>
-                                            <span class="fw-bold mx-2 h5" :class="{ 'text-danger': game.score.fullTime.home < game.score.fullTime.away }">{{ game.score.fullTime.home }}</span>
+                                            <span class="fw-bold mx-2 h5" :class="{ 'text-danger': game.score.fullTime.home < game.score.fullTime.away }">{{ game.score.fullTime.away }}</span>
                                             <img :src="game.awayTeam.crest" class="pais-bandeira mx-1" alt="Bandeira" width="24" height="24" v-if="game.awayTeam.crest"/> {{ game.awayTeam.name }}
                                         </td>
                                     </tr>
